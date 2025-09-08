@@ -125,7 +125,7 @@ length(hobbies)
 
 ## (a) Write one sentence describing what the `length()` function does?
 
-**Your answer:** The `length()` function returns the number of values in a vector.
+**Your answer:**
 
 ## (b) Suppose the student picks up a new hobby, photography. Create a new vector with all the hobbies from before, as well as this new hobby as the final element of the vector. Save the answer in the variable below called `Q2` (replace NULL with your answer).
 
@@ -162,7 +162,7 @@ Q2
 
 -   How many variables are measured for each observation? Save your answer in the R object below called `Q3_num_variables` (replace NULL with your answer).
 
--   What is the name of the third variable in the `avatar` tibble? Save your answer in the R object below called `Q3_fifth_variable_name` (replace NULL with your answer). Hint: when your answer is a word, make sure to put it in quotation marks.
+-   What is the name of the fifth variable in the `avatar` tibble? Save your answer in the R object below called `Q3_fifth_variable_name` (replace NULL with your answer). Hint: when your answer is a word, make sure to put it in quotation marks.
 
 -   What is the value of the `director` variable for the first observation in the `avatar` tibble? Save your answer in the R object below called `Q3_first_value_of_director` (replace NULL with your answer). Hint: when your answer is a word, make sure to put it in quotation marks.
 
