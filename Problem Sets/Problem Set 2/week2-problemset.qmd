@@ -9,6 +9,7 @@ editor: visual
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(cowplot)
+library(openintro)
 ```
 
 # Problem Set Objectives
@@ -95,8 +96,6 @@ Q1a_number_of_observations
 
 *\<Type your answer to the written question here (note that R code does not run outside of the grey R code chunks).\>*
 
-
-
 ## (b) Create three histograms to explore the distribution of acquisition year for this sample of pieces of art: (i) one with 3 bins, (ii) one with 18 bins, and (iii) one with 100 bins; make sure to specify meaningful axis labels where appropriate. Which of these histograms is most appropriate to describe the distribution of the artworks' years of creation? Why? Write a few sentences describing the distribution based on the histogram you chose as most appropriate.
 
 ```{r}
@@ -120,10 +119,7 @@ cowplot::plot_grid(Q1b_hist_years_3bins, Q1b_hist_years_18bins, Q1b_hist_years_1
 
 **Which histogram is most appropriate to visualize these data?**
 
-
-
 ## (c) Describe the distribution of year of acquisition of artwork based on the histogram(s) you produced in part (b).
-
 
 ## (d) Construct a boxplot to visualize the distribution of years of acquisition in a different way.
 
@@ -137,8 +133,6 @@ cowplot::plot_grid(Q1b_hist_years_18bins, Q1d_plot)
 ```
 
 ## (e) If you only had the boxplot to work with (from part d), what would you conclude about the distribution of acquisition years? How does this compare to what the histogram from part b reveals?
-
-
 
 ## (f) Construct a plot to visualize the distribution of the `type` variable. Make sure to specify meaningful axis labels where appropriate. Hint: If a categorical variable with many different categories, you may find it useful to use `coord_flip()` to flip the bars horizontally and/or change the options in the R code chunk to make the plot large (ex: `{r, fig.height=15, fig.width=5}`). From the choices below, select the best description for the distribution of the `type` variable.
 
@@ -175,8 +169,6 @@ Q1g_plots
 
 **Write 3-4 sentences comparing these distributions.**
 
-
-
 ## (h) Make a scatterplot showing the `width` versus `height` for each type of artwork (`type`) using the `facet_wrap()` option; make sure to specify meaningful axis labels where appropriate.
 
 ```{r}
@@ -187,7 +179,6 @@ Q1h_plots
 ```
 
 **Write 1-3 sentences describing any trends you see.**
-
 
 \newpage
 
@@ -224,7 +215,6 @@ Q2a_variable2 <- NULL
 
 ## (b) Before even doing any analysis, it is good to consider whether the data in question might have any strong bias that could impact any conclusions you may draw. Based on the information contained documentation (particularly in `Description` and `Source`), please write 3-4 sentences either (1) arguing the dataset should be generally unbiased and representative of all births in the United States or, if not, (2) what potential issues there might be with the data.
 
-
 ## (c) Choose two categorical variables and plot their distributions. Identify whether each of these variables is a nominal or ordinal categorical variable. Write one or two sentences interpreting each plot.
 
 ```{r, warning=FALSE, message=FALSE, fig.height=3, fig.width=4, fig.align='center'}
@@ -236,7 +226,6 @@ Q2c_plot2 <- NULL
 Q2c_plot1
 Q2c_plot2
 ```
-
 
 ## (d) Consider the variable `weight`. Replace NULL below with the type of this variable (either "continuous numerical", "discrete numerical", "nominal categorical", "nominal ordinal", or "binary"). Create a plot to visualize the distribution and write 2-3 sentences describing the distribution.
 
@@ -251,7 +240,6 @@ Q2d_plot <- NULL
 Q2d_plot
 ```
 
-
 ## (e) Construct a plot that shows the relationship between birth weight (`weight`) and mother's smoking status (`habit`); make sure to specify meaningful axis labels where appropriate.
 
 ```{r}
@@ -262,7 +250,6 @@ Q2e_plot
 ```
 
 ## (f) Based on your plot, would you conclude that there is a strong association, weak association, or no association between birth weight (`weight`) and mother's smoking status (`habit`)? Why or why not?
-
 
 ## (g) Sometimes, a potential association could be due factors that affect both variables. These are called *confounding variables* (we will discuss these in more detail later in the course). In @fig-Q2g, you'll find two plots showing the relationship between mothers' smoking status, whether the baby was premature or full-term, and birthweight.
 
@@ -288,11 +275,6 @@ births14 %>% ggplot(aes(x=habit, y=weight, fill=premie)) +
 
 **Do the above plot suggest that a mother's smoking habit could lead to premature births? Why or why not?**
 
-
 ## (h) In general, common medical advice for women who are pregnant or expect to become pregnant is to stop smoking to protect the health of their baby. Based on your plot and answer above, pleased write 2-4 sentences discussing whether this advice seems justified or not.
-
-
-
-
 
 We hope this exercise helped to emphasize the importance of the ethical considerations we discussed in class when it comes to making, interpreting, and communicating data visualizations.
