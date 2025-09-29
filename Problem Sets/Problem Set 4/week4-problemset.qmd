@@ -1,0 +1,243 @@
+---
+title: "STA130 - Week 4 Problem Set (Winter 2025) Sample Solutions"
+author: "YOUR NAME (Instructors: Nathalie Moon and Skye Griffith)"
+format: pdf
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(broom)
+library(cowplot)
+#library(openintro)
+#library(VGAMdata)
+#library(gapminder)
+```
+
+# Problem Set Objectives
+
+The weekly problem sets are designed to do the following:
+
+-   Provide structured practice with immediate feedback, allowing students to identify and correct misconceptions early
+-   Build practical data analysis skills through hands-on experience with R, reinforcing statistical concepts through active application
+-   Develop reproducible workflow habits, namely through the use of Quarto to combine code, output, and text.
+
+# Instructions
+
+## How do I check my work
+
+You will access the Problem Set and do your work on JupyterHub (link on Quercus)
+
+When you click `Render` to create a pdf of your solutions, you may get a popup that says "Popup Blocked - We attempted to open an external browser window...". If you get this message, click `Cancel` and then you will be able to open your .pdf file by selecting it in the bottom right window (in the same folder as your .qmd file).
+
+Once you are done with a question and want to check if it is correct, you will need to download your .qmd and .pdf files and upload them to MarkUs to run the tests.
+
+Usually when you do an assignment, you don't find out whether your answers are correct until *after* the deadline, when you get your grade back. However, using MarkUs, you can submit your work before the deadline and run tests to check your solutions!
+
+*Note:* Some parts of some questions may not be covered by tests in MarkUs, but you're still responsible for reviewing the posted solutions and make sure you understand them.
+
+**To download your files from JupyterHub, go to the bottom right window and do the following:**
+
+-   Select the files you want to download (likely .qmd and .pdf)
+-   Click on More $\Rightarrow$ Export
+
+**To upload your work to MarkUs to run the tests:**
+
+-   Go to MarkUs: <https://markus.teach.cs.toronto.edu/markus/courses>
+-   Open the current assignment and upload your file(s) (note that by default, the files you download from JupyterHub will likely be in your `Downloads` folder)
+-   Run the tests
+
+## What to do if a test fails on MarkUs
+
+-   Take a deep breath! Your work won't really be graded until the deadline, so start early to make sure you have lots of time to resolve issues before the deadline.
+-   Read the message to get hints about what the problem is. For example "variable X not present" means that you may have a typo in your variable name.
+-   Search on Piazza to see if other classmates have encountered a similar error (and if not, consider posting a screenshot of the error message)
+-   Come to TA or instructor office hours with your issue
+
+## How do I submit my Problem Set?
+
+You will submit your solutions (.qmd and .pdf) on MarkUs at the link above. You can submit as many times as you like but only your latest submission will be counted.
+
+\newpage
+
+## Question 1
+
+```{r}
+library(tidyverse)
+```
+
+The `starbucks.csv` dataset contains data on calories and carbohydrates (in grams) in Starbucks food menu items. Think of this as a sample from the larger population of all possible Starbucks menu items.
+
+```{r}
+starbucks <- read_csv("starbucks.csv")
+glimpse(starbucks)
+```
+
+### (a) Create a scatterplot showing the relationship between carbohydrates (x-axis) and calories (y-axis) in Starbucks menu items and save your plot in the R object `Q1a_plot`. Describe the association you observe.
+
+```{r}
+Q1a_plot <- NULL
+
+Q1a_plot
+```
+
+### (b) Before fitting any models, visually estimate what you think the slope might be. Look at the plot and think: "If item B has 10 more grams of carbohydrates than item A, how many calories more (or less) do you expect item B to have compared to item B?" Explain your reasoning.
+
+### (c) Which of the following represents the correct population linear regression model that describes the true relationship between carbohydrates and calories for all possible Starbucks menu items? Save your answer in the R object `Q1c_answer` below. Carefully define each term in the model you selected.
+
+A. $\text{carb}_i = \beta_0 + \beta_1 \cdot Calories_i + \epsilon_i$
+
+B. $\text{Calories}_i =  \beta_0 + \beta_1 \cdot carb_i + \epsilon_i$
+
+C. $\text{Calories}_i =  \hat\beta_0 + \hat\beta_1 \cdot carb_i$
+
+D. $\hat{y}_i =  \beta_0 + \beta_1 x_i + \epsilon_i$
+
+E. $\hat{y}_i =  \hat\beta_0 + \hat\beta_1 x_i + \hat{r}_i$
+
+```{r}
+Q1c_answer <- NULL
+Q1c_answer
+```
+
+### (d) Now fit a linear regression model using R to predict the number of calories based on grams of carbohydrates. Save your fitted model in the R object called `Q1d_model`.
+
+```{r}
+Q1d_model <- NULL
+
+Q1d_model
+```
+
+### (e) Use the `tidy()` function from the `broom()` library to see the estimates from your fitted model. Save this tibble in the R object `Q1e_model_summary`.
+
+```{r}
+Q1e_model_summary <- NULL
+
+Q1e_model_summary
+```
+
+### (f) Interpret each estimate in the fitted model you obtained above. What does each estimate mean, in practical terms?
+
+\newpage
+
+## Question 2 - shortened version of Q1, but predicting calories from grams of fat, and asking them to determine whether carbs or fat would be better at predicting calories.
+
+### (a) Create a scatterplot showing the relationship between fat (x-axis) and calories (y-axis) in Starbucks menu items and save your plot in the R object `Q2a_plot`. Describe the association you observe.
+
+```{r}
+Q2a_plot <- NULL
+
+Q2a_plot
+```
+
+### (b) Fit a linear regression model using R to predict the number of calories based on grams of fat. Save your fitted model in the R object called `Q2b_model`.
+
+```{r}
+Q2b_model <- NULL
+Q2b_model
+```
+
+### (c) Use the `tidy()` function from the broom library to see the estimates from your fitted model. Save this tibble in the R object `Q2c_model_summary`.
+
+```{r}
+Q2c_model_summary <- NULL
+Q2c_model_summary
+```
+
+### (d) Interpret the slope estimate from your fat model. What does this value mean in practical terms?
+
+### (e) Now, you'll compare the associations and linear regression models you fit in Question 1 and Question 2. Which of the two models do you think is better for predicting calorie content of food items at Starbucks
+
+\newpage
+
+## Question 3
+
+In this question, you'll again be thinking about the Starbucks data.
+
+Suppose we have access to data on ALL Starbucks menu items ever created (the complete population), and assume that the true population regression line to predict calories from protein content (in grams) is:
+
+$$\text{Calories}_i = 300 + 5 * \text{fat}_i + \epsilon_i$$
+
+### (a) If we took a sample of 50 items from this population and fitted a least squares regression line, would we expect to get exactly $\hat{\beta_0} = 300$ and $\hat{\beta}_{fat} = 5$? Save your answer ("Yes" or "No") in the R object `Q3a_Yes_or_No`, and explain why or why not in a few sentences.
+
+```{r}
+Q3a_Yes_or_No <- NULL
+Q3a_Yes_or_No
+```
+
+### (b) If we repeated this sampling process 1000 times (taking 1000 different samples of size 50), we would get 1000 values of $\hat{beta}_i$. This collection of 1000 slopes would approximate the sampling distribution of $\hat{beta}_i$. What would you expect to be the mean of this sampling distribution? Save your numerical answer in the R object `Q3b_expected_mean` below, and justify your answer in a few sentences.
+
+```{r}
+Q3b_expected_mean <- NULL
+Q3b_expected_mean
+```
+
+### (c) How would the spread (variability) of this sampling distribution change if we (i) Used samples of size 200 instead of 50? (ii) Used samples of size 20 instead of 50? Save your answers in the R objects `Q3c_i_spread` and `Q3c_ii_spread` below, and explain your reasoning in a few sentences. Your answers below should be one of the following: "the variability would increase", "the variability would decrease", "the variability would stay about the same".
+
+```{r}
+Q3c_i_spread <- NULL
+Q3c_i_spread
+
+Q3c_ii_spread <- NULL
+Q3c_ii_spread
+```
+
+\newpage
+
+## Question 4
+
+In a 1965 article, George Moore predicted the number of transistors on processors would double every year. He projected that level of growth would continue for at least another decade. A decade later, in 1975, he revised the forecast to doubling every two years. This is now commonly known as Moore's law.
+
+The `processors.csv` dataset contains a sample of data on processors, scraped from [Wikipedia](https://en.wikipedia.org/wiki/mos_transistor_count) about the number of transistors in central processing units (CPUs) and general processing units (GPUs). It also shows the name of the processor and the year it was introduced.
+
+```{r}
+processors <- read_csv("processors.csv")
+glimpse(processors)
+```
+
+### (a) Create an appropriate plot for the number of transistors (y axis) per year (x axis), faceted by `unit_type`. In other words, create two scatterplots, one for each value of the `unit_type` variable. Save your combined plot in the R object `Q4a_plots` below.
+
+```{r}
+Q4a_plots <- NULL
+
+Q4a_plots
+```
+
+### (b) Do you believe it is appropriate to fit a straight line through this plot as it is displayed? Replace NULL by your answer ("Yes" or "No") and write a sentence explaining your answer.
+
+```{r}
+Q4b_is_straight_line_model_appropriate <- NULL
+Q4b_is_straight_line_model_appropriate
+```
+
+### (c) Here you will modify the `processors` data by add a new variable called `log_transistors` to the dataset. You can use `mutate()` and the `log()` function (use the default, which is the natural logarithm, with base $e$), and save your updated tibble in the `Q4c_processors` R object below. Do not group or sort the data, nor do anything else to the processors tibble, other than creating a new variable.
+
+```{r}
+# Replace NA by the correct expression in the code below
+Q4c_processors <- NULL
+
+Q4c_processors
+```
+
+### (d) Using the `Q2c_processors` tibble, plot the association between `log_transistors` and `year`, faceted by `unit_type` and use `geom_smooth(se=FALSE, method="lm")` to add a line of best fit to both plots; save this combined plot in the R object `Q4d_plot`. Describe this association in each plot.
+
+Note: You will learn more about transforming variables in future courses and are not required to be able to explain why we've done this here. You can just treat `log_transistors` as we have other variables in class and refer to it as "the log number of transistors".
+
+```{r}
+Q4d_plot <- NULL
+
+Q4d_plot
+```
+
+### (e) Fit the following linear model and save it (that is, save the output of `lm()`) in an R object called `Q4e_model`. The model you will fit will predict the log number of transistors based year, focusing only on CPUs (not GPUs). Use the `tidy()` and `pull()` functions to extract the estimated coefficient for the `year` predictor, and save this estimate in the R object called `Q4e_estimated_coefficient_year`.
+
+```{r}
+Q4e_model <- NULL
+Q4e_estimated_coefficient_year <- NULL
+Q4e_estimated_coefficient_year
+
+
+```
+
+### (f) Briefly explain why or why not the interpretation of the intercept is helpful for understanding Moore's Law.
