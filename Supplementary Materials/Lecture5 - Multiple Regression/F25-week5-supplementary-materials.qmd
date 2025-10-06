@@ -1,0 +1,202 @@
+---
+title: "STA130 Fall 2025 Week 5 Supplementary Code"
+format: html
+editor: visual
+---
+
+```{r}
+#| include: FALSE
+
+library(tidyverse)
+library(openintro)
+library(moderndive)
+library(broom)
+```
+
+
+
+# Code for class: MarioKart example
+
+```{r}
+glimpse(mariokart) # from openintro package
+
+mariokart |> ggplot(aes(x=total_pr)) +
+  geom_histogram(bins=30, color="black", fill="gray")
+
+mariokart |> filter(total_pr > 100) |> select(total_pr, title)
+
+mariokart2 <- mariokart |> 
+	filter(total_pr < 100)
+
+mariokart2 |>
+	ggplot(aes(x=total_pr)) + 	
+	geom_histogram(bins=20, color="black", fill="gray") +
+  xlim(0,100)
+
+mariokart2 |>
+  ggplot(aes(x = duration, y = total_pr)) +
+  geom_point()
+
+mariokart2 |>
+  ggplot(aes(x = duration, y = total_pr)) +
+  geom_point() +
+  geom_smooth(method="lm", se=FALSE)
+
+# Model with only duration as predictor
+model1 <- lm(total_pr ~ duration, data = mariokart2)
+model1 |> tidy()
+
+# Get estimated coefficients
+beta0_hat <- model1 |> tidy() |>
+  filter(term == "(Intercept)") |>
+  select(estimate) |>
+  pull()
+beta1_hat <- model1 |> tidy() |>
+  filter(term == "duration") |>
+  select(estimate) |>
+  pull()
+
+beta0_hat
+beta1_hat
+
+
+mariokart2 |>
+  ggplot(aes(x=cond, y=total_pr)) +
+  geom_boxplot()
+
+mariokart2 |>
+  group_by(cond) |>
+  summarise(n=n())
+
+
+
+# Model with only condition (binary) as predictor
+model2 <- lm(total_pr ~ cond, data = mariokart2)
+summary(model2)$coefficients
+
+
+mariokart2 |>
+  group_by(cond) |>
+  summarise(n=n(), 
+            mean = mean(total_pr))
+
+
+mariokart2 |>
+  ggplot(aes(x = duration, y = total_pr, color = cond)) +
+  geom_point() +
+  xlab("Auction length in days") +
+  ylab("Sale price")
+
+
+model3 <- lm(total_pr ~ duration + cond, data = mariokart2)
+summary(model3)$coefficients
+
+mariokart2 |> 
+  ggplot(aes(x = duration, y = total_pr, color=cond)) +
+  geom_point() +
+  xlab("Auction length in days") +
+  ylab("Sale price") +
+  geom_parallel_slopes(se=FALSE)
+
+
+model4 <- lm(total_pr ~ duration * cond, data = mariokart2)
+summary(model4)$coefficients
+
+mariokart2 |> 
+  ggplot(aes(x = duration, y = total_pr, color=cond)) +
+  geom_point() +
+  xlab("Auction length in days") +
+  ylab("Sale price") +
+  geom_smooth(method="lm", se=FALSE)
+
+
+m4_b0 <- summary(model4)$coefficients[1,1]
+m4_b1 <- summary(model4)$coefficients[2,1]
+m4_b2 <- summary(model4)$coefficients[3,1]
+m4_b3 <- summary(model4)$coefficients[4,1]
+
+
+
+
+mariokart2 |> 
+  ggplot(aes(x = duration, y = total_pr, color=cond)) +
+  xlim(0,11) +
+  geom_point() +
+  xlab("Auction length in days") +
+  ylab("Sale price") +
+  geom_smooth(method="lm", se=FALSE)
+
+
+
+
+
+
+mariokart |> ggplot(aes(x = duration, y = total_pr, color=cond)) +
+  geom_point() +
+  geom_smooth(aes(x=duration, y=total_pr), 
+              data = mariokart[mariokart$cond=="used",], 
+              method="lm", formula = y ~ x, se=FALSE) +
+  geom_smooth(aes(x=duration, y=total_pr), 
+              data = mariokart[mariokart$cond=="new",], 
+              method="lm", formula = y ~ x, se=FALSE)
+
+
+# Categorical predictor
+mariokart2 |> 
+	group_by(cond) |>
+	summarise(n=n(), 
+       	mean = mean(total_pr)) 
+
+model2 <- lm(total_pr ~ cond, data = mariokart2)
+model2 |> tidy()
+
+
+# Visualizing both predictors and response together
+mariokart2 |>  
+ggplot(aes(		x = duration, y = total_pr, color = cond )) +  
+	geom_point() +  
+	xlab("Auction length in days") +  
+	ylab("Sale price")
+
+
+# Main effects model (parallel lines model)
+model3 <- lm(total_pr ~ duration + cond, data = mariokart2) 
+model3 |> tidy()
+
+mariokart2 |>   
+   ggplot(aes(x = duration, y = total_pr, 
+   	       color=cond)) + 
+   geom_point() +  
+   xlab("Auction length in days") +  
+   ylab("Sale price") +  
+   geom_parallel_slopes(se=FALSE) # Note: need to run library(moderndive) to get geom_parallel_slopes() function
+
+
+## Interaction model
+model4 <- lm(total_pr ~ duration * cond, data = mariokart2) 
+model4 |> tidy() 
+model4 |> tidy() |> select(term, estimate)
+
+mariokart2 |>   
+	ggplot(aes(x = duration, y = total_pr, color=cond)) + 
+	geom_point() +  
+	xlab("Auction length in days") +  
+	ylab("Sale price") +  
+	geom_smooth(method="lm", se=FALSE)
+
+```
+
+```{r}
+# Model comparisons
+
+model1 |> glance() 
+model2 |> glance() 
+model3 |> glance() 
+model4 |> glance() 
+
+model1 |> glance() |> select(r.squared, adj.r.squared, AIC, BIC)
+model2 |> glance() |> select(r.squared, adj.r.squared, AIC, BIC)
+model3 |> glance() |> select(r.squared, adj.r.squared, AIC, BIC)
+model4 |> glance() |> select(r.squared, adj.r.squared, AIC, BIC)
+
+```
