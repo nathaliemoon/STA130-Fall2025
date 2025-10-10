@@ -1,0 +1,239 @@
+---
+title: "STA130 - Week 6 Problem Set (Fall 2025)"
+author: "YOUR NAME (Instructors: Nathalie Moon and Skye Griffith)"
+format: pdf
+editor: visual
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(broom)
+library(cowplot)
+library(moderndive) # need this for geom_parallel_slopes()
+```
+
+# Problem Set Objectives
+
+The weekly problem sets are designed to do the following:
+
+-   Provide structured practice with immediate feedback, allowing students to identify and correct misconceptions early
+-   Build practical data analysis skills through hands-on experience with R, reinforcing statistical concepts through active application
+-   Develop reproducible workflow habits, namely through the use of Quarto to combine code, output, and text.
+
+# Instructions
+
+## How do I check my work
+
+You will access the Problem Set and do your work on JupyterHub (link on Quercus)
+
+When you click `Render` to create a pdf of your solutions, you may get a popup that says "Popup Blocked - We attempted to open an external browser window...". If you get this message, click `Cancel` and then you will be able to open your .pdf file by selecting it in the bottom right window (in the same folder as your .qmd file).
+
+Once you are done with a question and want to check if it is correct, you will need to download your .qmd and .pdf files and upload them to MarkUs to run the tests.
+
+Usually when you do an assignment, you don't find out whether your answers are correct until *after* the deadline, when you get your grade back. However, using MarkUs, you can submit your work before the deadline and run tests to check your solutions!
+
+*Note:* Some parts of some questions may not be covered by tests in MarkUs, but you're still responsible for reviewing the posted solutions and make sure you understand them.
+
+**To download your files from JupyterHub, go to the bottom right window and do the following:**
+
+-   Select the files you want to download (likely .qmd and .pdf)
+-   Click on More $\Rightarrow$ Export
+
+**To upload your work to MarkUs to run the tests:**
+
+-   Go to MarkUs: <https://markus.teach.cs.toronto.edu/markus/courses>
+-   Open the current assignment and upload your file(s) (note that by default, the files you download from JupyterHub will likely be in your `Downloads` folder)
+-   Run the tests
+
+## What to do if a test fails on MarkUs
+
+-   Take a deep breath! Your work won't really be graded until the deadline, so start early to make sure you have lots of time to resolve issues before the deadline.
+-   Read the message to get hints about what the problem is. For example "variable X not present" means that you may have a typo in your variable name.
+-   Search on Piazza to see if other classmates have encountered a similar error (and if not, consider posting a screenshot of the error message)
+-   Come to TA or instructor office hours with your issue
+
+## How do I submit my Problem Set?
+
+You will submit your solutions (.qmd and .pdf) on MarkUs at the link above. You can submit as many times as you like but only your latest submission will be counted.
+
+\newpage
+
+# Question 1: Analysis of Diamond Prices
+
+For this question, you'll work with the `diamonds` dataset from the `ggplot2` package (part of `tidyverse`). This dataset contains information about a large sample of diamonds, including their prices and various quality attributes.  
+
+```{r}
+# Load the data
+data(diamonds)
+glimpse(diamonds)
+```
+
+
+## (a) For this part, you'll start by typing `?diamonds` in the console below (not in the qmd document!) to get more information about the diamonds data and definitions of various variables. You can also use other functions covered in the course to help you answer the questions. Record your answers to the each of the following questions in the R objects in the code chunk below:
+
+```{r}
+# How many observations are there in the diamonds tibble?
+Q1a_num_observations <- NULL
+# How many variables are there in the diamonds tibble?
+Q1a_num_variables <- NULL
+# Which is the best colour of diamond present in these data? 
+# Don't forget to put quotation marks around your answer and to type it exacty like in the variable definition
+Q1a_best_diamond_colour <- NULL
+
+
+```
+
+
+
+## (b) For the rest of this problem set, you will be working with the `diamonds_sample` tibble defined below, which consists of a random sample of 1000 diamonds from the full diamonds data (run the code chunk below without changing it to define the `diamonds_sample` tibble).  Create a histogram showing the distribution of diamond prices based on the sample of diamonds in `diamonds_sample`. Describe the shape, center, and spread of this distribution in 2-3 sentences. Save your plot in `Q1b_price_histogram`.  Note: If you want to use a dollar sign in your answer, you have to put a backslash before it, like this: \$.
+
+```{r}
+### DO NOT CHANGE THE CODE BELOW
+set.seed(1)
+diamonds_sample <- diamonds |> slice_sample(n=1000) |>
+  mutate(cut_values = as.character(cut))
+### DO NOT CHANGE THE CODE ABOVE
+
+Q1b_price_histogram <- NULL
+
+
+Q1b_price_histogram
+```
+
+
+
+## (c) The `cut` variable is an ordinal categorical variable representing cut quality. Create a bar plot showing the distribution of the cut variable based on the sample of diamonds in `diamonds_sample`. Which cut quality is most common in `diamonds_sample`? Save your answer as a character string in `Q1c_most_common_cut`.
+
+```{r}
+Q1c_barplot <- NULL
+Q1c_most_common_cut <- NULL
+
+
+Q1c_barplot
+Q1c_most_common_cut
+```
+
+
+##(d) Create a new tibble called `diamonds_filtered` that includes only diamonds from `diamonds_sample` with:
+
+- Ideal or Premium cut
+- Carat weight between 0.5 and 1.5 (inclusive)
+- Price less than \$10,000
+
+How many diamonds meet these criteria? Save your answer in `Q1d_num_diamonds.` Note: You should type your answer as a number, not use a function to define it.
+
+```{r}
+diamonds_filtered <- NULL
+Q1d_num_diamonds <- NULL
+
+```
+
+## (e) Using your `diamonds_filtered` tibble, create a summary table showing the mean price, median price, and standard deviation of price for each cut quality (Ideal vs Premium). Your summary table should have columns: `cut`, `mean_price`, `median_price`, and `sd_price.` Save this table in `Q1e_summary_table.`
+
+```{r}
+Q1e_summary_table <- NULL
+
+Q1e_summary_table
+```
+
+## (f) Create a new variable called price_category that classifies diamonds in the diamonds_filtered dataset as:
+
+- "Budget": price less than or equal to 2000
+- "Mid-range": price between 2000 and 5000
+- "Premium": price greater or equal to 5000
+
+Save the updated tibble in `Q1f_diamonds_filtered`. Then, determine what percentage of Ideal cut diamonds fall into each price category. Save your three percentages (rounded to the nearest integer percentage) in `Q1f_pct_budget`, `Q1f_pct_midrange`, and `Q1f_pct_premium`. Note: You should type the answers as regular numbers or use `pull()` to extract your answers as simple numbers.
+
+```{r}
+Q1f_diamonds_filtered <- NULL
+Q1f_pct_budget <- NULL
+Q1f_pct_midrange <- NULL
+Q1f_pct_premium <- NULL
+
+```
+
+##(g) Using the full `diamonds_sample` sample, create a scatterplot showing the relationship between `carat` (x-axis) and `price` (y-axis). Include a linear regression line using `geom_smooth(method="lm", se=FALSE)`. Describe the association in 2-3 sentences. Save your plot in `Q1g_scatterplot`. 
+
+```{r}
+Q1g_scatterplot <- NULL
+
+Q1g_scatterplot 
+```
+
+
+
+
+## (h) When a scatterplot shows a curved relationship or increasing spread (heteroscedasticity), we can sometimes transform one or both variables to make the relationship more linear. Add the following three variables to the `diamonds_sample` tibble, and save the updated tibble in the R object `Q1h_diamonds_transformed`:
+
+- `log_price`: the natural logarithm of price
+- `log_carat`: the natural logarithm of carat
+- `sqrt_price`: the square root of price
+
+```{r}
+Q1h_diamonds_transformed <- NULL
+
+```
+
+## (i) Now create three scatterplots to compare different transformations:
+
+- `Q1i_plot_logprice_carat`: log_price (y axis) vs carat (x-axis)
+- `Q1i_plot_logprice_logcarat`: log_price (y axis) vs log_carat (x-axis)
+- `Q1i_plot_sqrtprice_carat`: sqrt_price (y axis) vs carat (x-axis)
+
+```{r}
+Q1i_plot_logprice_carat <- NULL
+Q1i_plot_logprice_logcarat <- NULL
+Q1i_plot_sqrtprice_carat <- NULL
+
+
+```
+
+## (j) Which of the three plots above appears to be most linear?  What is a downside of considering transformations to make the association between two variables behave more linearly?
+
+
+## (k)  Fit a simple linear regression model predicting `log_price` from `log_carat` using your `Q1h_diamonds_transformed` dataset. Save the model in `Q1k_model.` Using the `tidy()` function, extract and save the slope estimate (rounded to 2 decimal places) in `Q1k_slope_estimate`.  Note: It is difficult to interpret estimates when transformations are used, so it's OK to leave this in terms of log(carat) and log(price).
+
+```{r}
+Q1k_model <- NULL
+Q1k_slope_estimate <- NULL
+
+
+Q1k_slope_estimate
+```
+
+
+
+## (l) Now consider the two multiple regressions model below, to predict `log_price` from both `log_carat` and `cut_values`, using the `Q1h_diamonds_transformed` data.  What is the difference between these two models?
+
+```{r}
+### DO NOT CHANGE THE CODE BELOW, apart from uncommenting it (delete the hashtags) AFTER you've completed part Q1h and defined `Q1h_diamonds_transformed`
+#Q1l_model_A <- lm(log_price ~ log_carat + cut_values, data=Q1h_diamonds_transformed)
+#Q1l_model_A |> tidy()
+#Q1l_model_B <- lm(log_price ~ log_carat * cut_values, data=Q1h_diamonds_transformed)
+#Q1l_model_B |> tidy()
+### DO NOT CHANGE THE CODE ABOVE
+
+```
+
+
+
+## (m) Consider the two visualizations below for the models presented above.  Based on these plots, are the predictions of log(price) from both models similar or different? Be specific in your answer. 
+
+```{r}
+### DO NOT CHANGE THE CODE BELOW, apart from uncommenting it (delete the hashtags) AFTER you've completed part Q1h and defined `Q1h_diamonds_transformed`
+#plotA <- Q1h_diamonds_transformed |> ggplot(aes(x=log_carat, y=log_price, color=cut_values)) +
+#  geom_point(alpha=0.2) +
+#  geom_parallel_slopes(se = FALSE) +
+#  ylim(5,11)
+
+#plotB <- Q1h_diamonds_transformed |> ggplot(aes(x=log_carat, y=log_price, color=cut_values)) +
+#  geom_point(alpha=0.2) +
+#  geom_smooth(method="lm", se = FALSE) +
+#  ylim(5,11)
+
+#cowplot::plot_grid(plotA, plotB, ncol=2)
+### DO NOT CHANGE THE CODE ABOVE
+```
+
+
