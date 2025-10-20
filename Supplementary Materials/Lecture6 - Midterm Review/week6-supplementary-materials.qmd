@@ -1,0 +1,131 @@
+---
+title: "Untitled"
+format: pdf
+---
+
+```{r setup}
+library(tidyverse)
+library(broom)
+library(cowplot)
+```
+
+```{r load}
+# load amazon books data
+books <- read_csv("amazonbooks.csv")
+books <- na.omit(books)
+```
+
+# Class Activities
+
+## Week 2: Data visualization
+
+```{r}
+# Book weight by binding type
+
+# Histograms
+W2_hist <- books |>
+  ggplot(aes(x=Weight_oz)) +
+  geom_histogram(color="black", fill="gray", bins = 15) +
+  facet_wrap(~Hard_or_Paper) +
+  labs(title = "Weight of Amazon Books",
+       subtitle = "Grouped by binding type (Hardcover or Paperback)",
+       x = "Weight (Ounces)")
+  
+# Boxplots
+W2_boxplot <- books |>
+  ggplot(aes(x=Hard_or_Paper, y=Weight_oz)) +
+  geom_boxplot() + 
+  xlab("Binding type (Hardcover or Paperback)") +
+  ylab("Weight (Ounces)") +
+  labs(title = "Weight of Amazon Books",
+       subtitle = "Grouped by binding type (Hardcover or Paperback)",
+       x = "Weight (Ounces)")
+
+plot_grid(W2_hist, W2_boxplot)
+```
+
+## Week 3: Data Wrangling
+
+```{r}
+books |> mutate(
+  length = case_when(NumPages <= 300 ~ "short",
+                     NumPages <= 600 ~ "mid-length",
+                     NumPages <= 900 ~ "long")) |>
+  group_by(length) |>  
+  summarise(n = n(),        
+           	max_weight = max(Weight_oz),
+            mean_price = mean(`List Price`))
+```
+
+## Week 4: Simple linear regression
+
+## Week 5: Multple regression
+
+```{r}
+book3 <-
+  books |> 
+  filter(`List Price` < 50) |>
+  mutate(
+    length = case_when(NumPages <= 400 ~ "short",
+                       NumPages <= 900 ~ "long"))
+
+model3 <- lm(Weight_oz ~ `List Price` * length, data = book3)
+model3 |> tidy()
+
+book3 |> 
+  ggplot(aes(x = `List Price`, y = Weight_oz, colour = length, lty = length)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+
+
+```{r}
+book2 <- books |>
+  mutate(decade = (`Pub year` %/% 10) * 10,
+         decade = paste(decade, "s", sep=""))
+
+book2 |>
+  ggplot(aes(x=decade, y=NumPages)) +
+  geom_boxplot() + 
+  xlab("D") +
+  ylab("Weight (Ounces)") +
+  labs(title = "Weight of Amazon Books",
+       subtitle = "Grouped by publication decade",
+       x = "Weight (Ounces)")
+```
+
+
+
+## Week 4 Simple Linear Regression
+
+```{r}
+model1 <- lm(Weight_oz ~ NumPages, data = books)
+model1 |> tidy()
+```
+
+## Week 5: Multiple Regression
+
+```{r}
+model2 <- lm(Weight_oz ~ Thick + Hard_or_Paper, data = books)
+model2 |> tidy()
+```
+
+```{r}
+book3 <-
+  books |> 
+  filter(`List Price` < 50) |>
+  mutate(
+    length = case_when(NumPages <= 400 ~ "short",
+                       NumPages <= 900 ~ "long"))
+
+model3 <- lm(Weight_oz ~ `List Price` * length, data = book3)
+model3 |> tidy()
+
+book3 |> 
+  ggplot(aes(x = `List Price`, y = Weight_oz, colour = length)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+
