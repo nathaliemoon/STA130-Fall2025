@@ -1,0 +1,104 @@
+---
+title: "Fall 2025 - Lecture 10 Hypothesis Testing Class Code"
+format: pdf
+editor: visual
+---
+
+
+```{r}
+library(tidyverse)
+```
+
+
+
+# Wheel of Destiny Activity
+```{r}
+# Read in the class data (first, save it into the spreadsheet)
+coinflips <- read_csv("class_coin_flips_L0101.csv")
+# Backup data
+#coinflips <- read_csv("backup_fair_coin_flips.csv")
+glimpse(classdata)
+
+# Check if any values are outside of [0,10]
+coinflips |> filter(number_of_heads < 0 | number_of_heads > 10)
+
+# Calculate the proportion of heads for each observation
+coinflips <- coinflips |>
+  mutate(prop_heads = number_of_heads / 10)
+
+# Create histogram of the results
+coinflips |>
+  ggplot(aes(x=prop_heads)) +
+  geom_histogram(binwidth=0.1, color="black", fill="gray") +
+  labs(x = paste("Proportion of heads, in ", 10, " flips of a fair coin", sep="")) +
+  xlim(0,1)
+
+# Adding our observed proportion of heads (from Spinning Wheel of Destiny) to the plot
+observed_proportion_red <- 4/10 # Replace this value with what we get in class
+coinflips |>
+  ggplot(aes(x=prop_heads)) +
+  geom_histogram(binwidth=0.1, color="black", fill="gray") +
+  labs(x = paste("Proportion of heads, in ", 10, " flips of a fair coin", sep="")) +
+  xlim(0,1) +
+  geom_point(aes(x=observed_proportion_red, y=0), color="blue", shape=4, size=4, stroke=2)
+
+
+## Visualizing "as extreme or more extreme"
+# For each proportion of heads we got, figure out if it's closer to the null value (0.5)
+# than our observed value was to the null value.
+coinflips <- coinflips |>
+  mutate( is_extreme = abs(prop_heads - 0.5) >= abs(observed_proportion_red - 0.5) )
+
+coinflips |>
+  ggplot(aes(x=prop_heads, fill=is_extreme)) +
+  geom_histogram(binwidth=0.1, color="black") +
+  scale_fill_manual(values=c("gray", "#E57373"), guide="none") +
+  geom_point(aes(x=observed_proportion_red, y=0), color="blue", shape=4, size=5, stroke=2) +
+  labs(x = paste("Proportion of heads, in ", 10, " flips of a fair coin", sep="")) +
+  xlim(0,1)
+
+
+## Calculating p-value
+num_trials <- nrow(coinflips)
+
+sum(abs(coinflips$prop_heads - 0.5) >= abs(observed_proportion_red - 0.5)) / num_trials
+
+coinflips |> filter(is_extreme == TRUE) |> 
+  summarise(pvalue = n() / num_trials)
+
+```
+
+
+# Code from class slides
+
+
+
+
+
+
+## Example simulating coin flips
+```{r}
+num_trials <- 1000 # Number of simulated values (aka number of students flipping 10 coins each)
+n <- 10 # Sample size
+simulated_proportion_heads <- rep(NA, times=num_trials)
+set.seed(130)
+for(i in 1:num_trials){
+  one_sample <- sample(c("Heads", "Tails"), 
+                       size = n, 
+                       p = c(0.5, 0.5),
+                       replace = TRUE)
+  simulated_proportion_heads[i] <- sum(one_sample == "Heads") / n
+}
+
+coin_flips <- tibble(prop_heads = simulated_proportion_heads)
+coin_flips %>% ggplot(aes(x = prop_heads)) +
+  geom_histogram(bins=10, color="black", fill="gray") +
+  labs(x = "Proportion of Heads in 10 flips of a fair coin")
+```
+
+
+
+
+
+
+
