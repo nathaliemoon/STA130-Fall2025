@@ -1,0 +1,108 @@
+---
+title: "Lecture 11 Class Code"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+
+# Code from class slides
+
+## Permutation Test with Dolphin Data
+
+```{r}
+dolphins <- read_csv("dolphins.csv", col_types = "cdc")
+glimpse(dolphins)
+
+# plot results (histograms)
+dolphins |>
+  ggplot(aes(x = score)) +
+  geom_histogram(bins=5, color="black", fill="gray") +
+  labs(x = "Change in Depression Scores") +
+  facet_wrap(~group)
+
+# plot results (boxplot)
+dolphins |>
+  ggplot(aes(x = group, y=score)) +
+  geom_boxplot() +
+  labs(x = "Change in Depression Scores")
+```
+
+```{r}
+
+mean_obs <- 
+  dolphins |>
+  group_by(group) |>
+  summarise(means = mean(score))
+
+mean_obs
+
+delta_mean_obs <- 
+  dolphins |>
+  group_by(group) |>
+  summarise(means = mean(score)) |>
+  summarise(value = diff(means)) |>
+  as.numeric()
+
+delta_mean_obs
+```
+
+```{r}
+# simulation info
+num_trials <- 1000  # number of simulated values
+
+# random seed
+set.seed(130)
+
+# simulate!
+delta_mean_simulations <- rep(NA, num_trials)
+for(i in 1:num_trials){
+  # perform a random permutation
+  simdata <- 
+    dolphins |> 
+    mutate(group = sample(group, replace=FALSE))
+  # compute the simulated test statistic
+  delta_mean_sim <- 
+    simdata |> 
+    group_by(group) |>
+    summarise(means = mean(score)) |>
+    summarise(value = diff(means)) |>
+    as.numeric()
+  # store the simulated value
+  delta_mean_simulations[i] <- delta_mean_sim
+}
+
+# save output to a new tibble
+simulation_results <- tibble(mean_diff = delta_mean_simulations)
+
+# plot results
+simulation_results |>
+  ggplot(aes(x = mean_diff)) +
+  geom_histogram(bins=30, color="black", fill="gray") +
+  labs(x = "Differences in Dolphin vs Control from Random Permutations")
+```
+
+
+```{r}
+# calculate 2-sided p-value
+delta_mean_null <- 0  # null hypothesis value
+
+pvalue_2side <- 
+  sum(abs(delta_mean_simulations - delta_mean_null) >= 
+      abs(delta_mean_obs - delta_mean_null)) / num_trials
+
+print(pvalue_2side)
+```
+
+```{r}
+# run hypothesis test
+
+alpha <- 0.05  # alpha level
+reject_null <- pvalue_2side < alpha  # reject the null?
+
+print(reject_null)
+```
